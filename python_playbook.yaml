@@ -1,0 +1,32 @@
+# APT Module Informations
+# https://docs.ansible.com/ansible/latest/modules/apt_module.html
+- name: Install all required dependencies
+  hosts: ubuntu_1
+  tasks:
+    - name: Installing python modules
+      apt:
+        name: ["supervisor", "curl", "python", "python-setuptools", "python-dev", "build-essential", "python-pip", "python-mysqldb"]
+        state: installed
+
+# Module PIP Install
+# https://docs.ansible.com/ansible/latest/modules/pip_module.html
+    - name: Installing Pip modules
+      pip:
+        name: ["flask", "flask-mysql"]
+
+# Module to Copy files
+# https://docs.ansible.com/ansible/latest/modules/copy_module.html
+    - name: Copying app file to destiny
+      copy:
+        src: app.py
+        dest: /opt/app.py
+
+# Module Shell to Start Python
+# https://docs.ansible.com/ansible/latest/modules/shell_module.html
+    - name: Copying supervisor file to target
+      copy:
+        src: flaskapp.conf
+        dest: /etc/supervisor/conf.d/
+
+    - name: Starting Python Flask App by Supervisor
+      shell: /etc/init.d/supervisor start      

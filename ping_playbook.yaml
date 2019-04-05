@@ -1,0 +1,5 @@
+- name: Testing Playbook
+  hosts: web
+  tasks:
+    - name: Ping the web hosts
+      ping:

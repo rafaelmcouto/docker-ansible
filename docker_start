@@ -1,0 +1,5 @@
+docker pull rafaelmcouto/ubuntu14_ssh:0.1
+
+docker run -d --name ubuntu_1 --rm rafaelmcouto/ubuntu14_ssh:0.1 
+docker run -d --name ubuntu_2 --rm rafaelmcouto/ubuntu14_ssh:0.1 
+docker run -d --name ubuntu_3 --rm rafaelmcouto/ubuntu14_ssh:0.1 

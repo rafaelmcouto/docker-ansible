@@ -1,0 +1,55 @@
+# APT Module Informations
+# https://docs.ansible.com/ansible/latest/modules/apt_module.html
+- name: Installing and Settings from DataBase
+  hosts: ubuntu_1
+  tasks:
+    - name: Using APT Module to Install DataBase
+      apt:
+      # name: ['mysql-server', 'mysql-client', 'python-mysqldb']
+        name="{{ item }}"
+        state=installed
+      with_items:
+        - mysql-server
+        - mysql-client
+        - python-mysqldb
+
+# POR ALGUM MOTIVO, O MYSQL NÃO ESTAVA EM EXECUÇÃO, POR ISSO O ERRO NOS OUTROS MÓDULOS
+# Service Module Informations
+# https://docs.ansible.com/ansible/latest/modules/service_module.html
+#    - name: Starting MySQL
+#      service:
+#        name: mysql
+#        state: started
+#        enabled: yes
+    - name: Starting MySQL
+      shell: /etc/init.d/mysql start
+
+
+# Module to Create a DataBase
+# https://docs.ansible.com/ansible/latest/modules/mysql_db_module.html
+    - name: Creating a DataBase
+      mysql_db:
+        name: employee_db
+        state: present
+
+# Module to create user and other stuffs on MySQL
+# https://docs.ansible.com/ansible/latest/modules/mysql_user_module.html
+    - name: Creating user and password
+      mysql_user:
+        name: db_user
+        password: Passw0rd
+        priv: '*.*:ALL'
+        host: '%'
+        state: present
+
+# Making a IMPORT dump file
+    - name: Copy database dump file
+      copy:
+        src: dump.sql
+        dest: /tmp
+
+    - name: Restore database
+      mysql_db:
+        name: employee_db
+        state: import
+        target: /tmp/dump.sql
